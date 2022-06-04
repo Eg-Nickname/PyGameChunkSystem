@@ -5,15 +5,16 @@ pygame.init()
 
 pygame.display.set_caption("Chunk System")
 
-screen = pygame.display.set_mode((640,370),SCALED,OPENGL)
+screen = pygame.display.set_mode((640,360),SCALED,OPENGL)
 clock = pygame.time.Clock()
 
 DELTA_TIME = 0
-TILE_SIZE = 16
-CHUNK_SIZE = 16
+TILE_SIZE = 32
+CHUNK_SIZE = 8
 
 loop = 1
-
+w, h = pygame.display.get_surface().get_size()
+# print(w, " ", h)
 def draw():
     TILE_COUNT = 0
     for chy in range(2):
@@ -22,9 +23,10 @@ def draw():
                 for idx in range(CHUNK_SIZE):
                     top_x = TILE_SIZE * idx + chx * TILE_SIZE * CHUNK_SIZE
                     top_y = TILE_SIZE * idy + chy * TILE_SIZE * CHUNK_SIZE
-                    TILE_COUNT += 1
-                    pygame.draw.rect(screen, (idy*12,idx*12,100), (top_x,top_y,TILE_SIZE,TILE_SIZE))
-
+                    if top_x < w or top_y > h:
+                        TILE_COUNT += 1
+                        pygame.draw.rect(screen, (idy*12,idx*12,100), (top_x,top_y,TILE_SIZE,TILE_SIZE))
+    print(TILE_COUNT)
     pygame.display.update()
 
 while loop:
