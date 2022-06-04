@@ -1,4 +1,3 @@
-import chunk
 import pygame
 
 pygame.init()
