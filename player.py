@@ -25,3 +25,34 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.position_x, self.position_y]
+
+
+    def movement(self, pressed_keys):
+        if pressed_keys[100]:
+            if self.velocity_x < self.max_x_velocity:
+                self.velocity_x+=self.velocity_x_increse
+
+        if pressed_keys[97]:	
+            if self.velocity_x > -self.max_x_velocity:
+                self.velocity_x-=self.velocity_x_increse
+
+        if pressed_keys[119]:	
+            if self.velocity_y > -self.max_y_velocity:
+                self.velocity_y-=self.velocity_y_increse
+
+        if pressed_keys[115]:
+            if self.velocity_y < self.max_x_velocity:
+                self.velocity_y+=self.velocity_x_increse
+
+        self.position_x += int(self.velocity_x/100)
+        self.position_y += int(self.velocity_y/100)
+
+        if self.velocity_x>0:
+            self.velocity_x-=15
+        elif self.velocity_x<0:
+            self.velocity_x+=15
+
+        if self.velocity_y>0:
+            self.velocity_y-=15
+        elif self.velocity_y<0:
+            self.velocity_y+=15
