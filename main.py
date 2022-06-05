@@ -34,8 +34,7 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
                             pygame.draw.rect(screen, (idy*12,idx*12,100), (top_x,top_y,TILE_SIZE,TILE_SIZE))
     
     for particle in particles:
-        pygame.draw.circle(screen, (255,255,255), (particle.pos_x-OFFSET_X, particle.pos_y-OFFSET_Y), 8)
-        pygame.draw.circle(screen, (255,0,0), (particle.pos_x-OFFSET_X, particle.pos_y-OFFSET_Y), 6)
+        screen.blit(particle.image, (particle.pos_x-OFFSET_X, particle.pos_y-OFFSET_Y))
 
     # Render graphic on top of tile that cursor is on top of
     screen.blit(pygame.image.load("tile_select.png"), (selected_tile[0]-OFFSET_X-2, selected_tile[1]-OFFSET_Y-2))

@@ -1,3 +1,4 @@
+import pygame
 class Particle():
     def __init__(self, pos_x, pos_y, rotation, creation_time):
         self.pos_x = pos_x
@@ -5,6 +6,8 @@ class Particle():
         self.rotation = rotation
         self.life_span = 300
         self.creation_time = creation_time
+        
+        self.image = pygame.image.load("particle.png")
 
     def update_pos(self):
         self.pos_x += self.rotation[0] * 2
