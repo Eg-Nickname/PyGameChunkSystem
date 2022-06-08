@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from math import floor, radians
+from chunks import Chunks
 
 from settings import *
 from camera import calculate_offset
@@ -21,19 +22,14 @@ particle_light = pygame.transform.scale(pygame.image.load("./graphics/particle_l
 
 particles = []
 
+chunks = Chunks()
+
 loop = 1
 # print(w, " ", h)
 def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
-    screen.fill((0,0,0))
-    for chy in range(3):
-        for chx in range(3):
-            for idy in range(CHUNK_SIZE):
-                for idx in range(CHUNK_SIZE):
-                    top_x = (TILE_SIZE * idx + (chx+PLAYER_CHUNK[0]-1) * TILE_SIZE * CHUNK_SIZE) - OFFSET_X
-                    top_y = (TILE_SIZE * idy + (chy+PLAYER_CHUNK[1]-1) * TILE_SIZE * CHUNK_SIZE) - OFFSET_Y
-                    if top_x < WIDTH and top_x > -32 or top_y > HEIGHT and top_y < -32:
-                            pygame.draw.rect(screen, (idy*12,idx*12,100), (top_x,top_y,TILE_SIZE,TILE_SIZE))
-    
+    # screen.fill((0,0,0))
+    chunks.render_chunk(screen, PLAYER_CHUNK, (OFFSET_X, OFFSET_Y))
+
     for particle in particles:
         screen.blit(particle_light, (particle.pos_x-OFFSET_X-2, particle.pos_y-OFFSET_Y-2), special_flags=BLEND_RGB_ADD)
         screen.blit(particle.image, (particle.pos_x-OFFSET_X, particle.pos_y-OFFSET_Y))
@@ -44,6 +40,7 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     
     screen.blit(player.image, (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
     FPS = str(int(clock.get_fps()))
+    # print(FPS)
     pygame.display.update()
 
 while loop:
@@ -115,8 +112,6 @@ while loop:
     #     print("---------------------------------------------------")
     
     PLAYER_CHUNK = (floor((player.position_x)/(CHUNK_SIZE*TILE_SIZE)), floor((player.position_y)/(CHUNK_SIZE*TILE_SIZE)))
-        
-
 
     draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles)
     clock.tick(60) # fps
