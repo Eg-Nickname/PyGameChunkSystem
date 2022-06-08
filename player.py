@@ -18,10 +18,12 @@ class Player(pygame.sprite.Sprite):
         self.velocity_y_increse = 40
         self.max_y_velocity = 280
         
+        self.last_attack = 0
+        self.attack_delay = 60 # 1s
 
         # Sprite
         self.sprites = []
-        self.image = pygame.transform.scale(pygame.image.load("cat.png"),(32,32))
+        self.image = pygame.transform.scale(pygame.image.load("./graphics/cat.png"),(32,32))
 
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.position_x, self.position_y]
