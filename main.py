@@ -3,10 +3,13 @@ from pygame.locals import *
 from math import floor, radians
 from settings import *
 
+# Pygame init stuff
 pygame.init()
 pygame.display.set_caption("Chunk System")
+clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT),SCALED,OPENGL)
 
+# Engine imports
 from chunks import Chunks
 from camera import calculate_offset
 from player import Player
@@ -15,26 +18,21 @@ import GraphicsLoader
 
 graphics = GraphicsLoader.load_graphics("./static_graphics")
 
-clock = pygame.time.Clock()
-
-sprites = pygame.sprite.Group()
-player = Player()
-sprites.add(player)
-
 particle_light = pygame.transform.scale(pygame.image.load("./static_graphics/particle_light.png").convert_alpha(),(12,12))
 
 particles = []
 
 chunks = Chunks()
+sprites = pygame.sprite.Group()
+player = Player()
+sprites.add(player)
 
-loop = 1
-# print(w, " ", h)
 def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     # screen.fill((0,0,0))
     chunks.render_chunk(screen, PLAYER_CHUNK, (OFFSET_X, OFFSET_Y))
 
     for particle in particles:
-        screen.blit(particle_light, (particle.pos_x-OFFSET_X-2, particle.pos_y-OFFSET_Y-2), special_flags=BLEND_RGB_ADD)
+        screen.blit(graphics[particle_light], (particle.pos_x-OFFSET_X-2, particle.pos_y-OFFSET_Y-2), special_flags=BLEND_RGB_ADD)
         screen.blit(particle.image, (particle.pos_x-OFFSET_X, particle.pos_y-OFFSET_Y))
 
     # Render graphic on top of tile that cursor is on top of
@@ -46,6 +44,7 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     # print(FPS)
     pygame.display.update()
 
+loop = 1
 while loop:
     pressed_keys = pygame.key.get_pressed()
 
@@ -118,7 +117,7 @@ while loop:
 
 
 
-    if DELTA_TIME%10800 == 1:
+    if DELTA_TIME% CHUNKS_SAVE_DELAY == 1:
         chunks.save_chunks()
 
     draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles)

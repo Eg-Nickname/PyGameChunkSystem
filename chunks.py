@@ -42,10 +42,6 @@ class Chunks():
 
         return loaded_chunk
 
-
-    # def unload_chunk():
-    #     pass
-
     def render_chunk(self, screen, PLAYER_CHUNK, OFFSET):
         for chy in range(3):
             current_chunk_y = chy+PLAYER_CHUNK[1]-1
