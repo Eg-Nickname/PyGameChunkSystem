@@ -1,5 +1,7 @@
 import pygame
 import random
+import pickle
+
 from settings import *
 
 class Tile():
@@ -9,6 +11,18 @@ class Tile():
 class Chunks():
     def __init__(self):
         self.chunks = {}
+
+        try:
+            map_file = open("map.save", "rb")
+            self.chunks = pickle.load(map_file)
+            map_file.close()
+        except:
+            pass
+
+    def save_chunks(self):
+        map_file = open("map.save", "wb")
+        map_file = pickle.dump(self.chunks, map_file)
+        print("Chunks Saved!")
 
     def generate_chunk(self, chunk_index):
         generated_chunk = []
@@ -27,6 +41,7 @@ class Chunks():
             loaded_chunk = self.chunks[chunk_index]
 
         return loaded_chunk
+
 
     # def unload_chunk():
     #     pass

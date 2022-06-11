@@ -23,7 +23,7 @@ class Player(pygame.sprite.Sprite):
 
         # Sprite
         self.sprites = []
-        self.image = pygame.transform.scale(pygame.image.load("./graphics/cat.png"),(32,32))
+        self.image = pygame.transform.scale(pygame.image.load("./static_graphics/cat.png").convert_alpha(),(32,32))
 
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.position_x, self.position_y]

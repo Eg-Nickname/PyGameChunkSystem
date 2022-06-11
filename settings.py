@@ -1,6 +1,3 @@
-from turtle import width
-
-
 TILE_SIZE = 32
 CHUNK_SIZE = 10
 

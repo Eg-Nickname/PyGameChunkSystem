@@ -7,7 +7,7 @@ class Particle():
         self.life_span = 240
         self.creation_time = creation_time
         
-        self.image = pygame.image.load("./graphics/particle.png")
+        self.image = pygame.image.load("./static_graphics/particle.png")
 
     def update_pos(self):
         self.pos_x += self.rotation[0] * 2
