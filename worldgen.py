@@ -11,13 +11,13 @@ class Tile():
     def __init__(self, color=None):
         self.color = color or (random.randint(0,255), random.randint(0,255), random.randint(0,255))
 
-# def elevation_noise(tile_index_x, tile_index_y):
-#     simplex.seed(elevation_noise_seed)
-#     return simplex.noise2(tile_index_x, tile_index_y)
+def elevation_noise(tile_index_x, tile_index_y):
+    simplex.seed(elevation_noise_seed)
+    return simplex.noise2(tile_index_x, tile_index_y)
 
-# def moisture_noise(tile_index_x, tile_index_y):
-#     simplex.seed(moisture_noise_seed)
-#     return simplex.noise2(tile_index_x, tile_index_y)
+def moisture_noise(tile_index_x, tile_index_y):
+    simplex.seed(moisture_noise_seed)
+    return simplex.noise2(tile_index_x, tile_index_y)
 
 
 
@@ -29,7 +29,7 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
             tile_top_left_y = (chunk_top_left[1]+idy)/100
             for idx in range(CHUNK_SIZE):
                 tile_top_left_x = (chunk_top_left[0]+idx)/100
-                noise = simplex.noise2(tile_top_left_x, tile_top_left_y)
+                noise = elevation_noise(tile_top_left_x, tile_top_left_y)
                 if noise>0:
                     row.append(Tile((0,255,0)))
                 else:

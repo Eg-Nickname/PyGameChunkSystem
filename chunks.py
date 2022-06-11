@@ -1,12 +1,10 @@
 import pygame
-import random
+
 import pickle
 
 from settings import *
-class Tile():
-    def __init__(self, color=None):
-        self.color = color or (random.randint(0,255), random.randint(0,255), random.randint(0,255))
-        
+from worldgen import world_generate_chunk
+
 class Chunks():
     def __init__(self):
         self.chunks = {}
@@ -23,14 +21,14 @@ class Chunks():
         map_file = pickle.dump(self.chunks, map_file)
         print("Chunks Saved!")
 
-    def generate_chunk(self, chunk_index):
-        generated_chunk = []
-        for idy in range(CHUNK_SIZE):
-            row = []
-            for idx in range(CHUNK_SIZE):
-                row.append(Tile())
-            generated_chunk.append(row)
-            # generated_chunk = world_generate_chunk()
+    def generate_chunk(self, chunk_index, current_chunk_x, current_chunk_y):
+        # generated_chunk = []
+        # for idy in range(CHUNK_SIZE):
+        #     row = []
+        #     for idx in range(CHUNK_SIZE):
+        #         row.append(Tile())
+        #     generated_chunk.append(row)
+        generated_chunk = world_generate_chunk(current_chunk_x, current_chunk_y)
         self.chunks[chunk_index] = generated_chunk
 
     def load_chunk(self, current_chunk_x, current_chunk_y):
@@ -38,7 +36,7 @@ class Chunks():
         try:
             loaded_chunk = self.chunks[chunk_index]
         except:
-            self.generate_chunk(chunk_index)
+            self.generate_chunk(chunk_index, current_chunk_x, current_chunk_y)
             loaded_chunk = self.chunks[chunk_index]
 
         return loaded_chunk

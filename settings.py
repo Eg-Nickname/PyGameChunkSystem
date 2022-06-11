@@ -6,6 +6,6 @@ DELTA_TIME = 0
 WIDTH = 640     # Px
 HEIGHT = 360    # Px
 
-CHUNKS_SAVE_DELAY = 180 # Time in seconds
+CHUNKS_SAVE_DELAY = 300 # Time in seconds
 
 CHUNKS_SAVE_DELAY = CHUNKS_SAVE_DELAY * 60

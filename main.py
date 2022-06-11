@@ -41,7 +41,7 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     
     screen.blit(player.image, (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
     FPS = str(int(clock.get_fps()))
-    # print(FPS)
+    print(FPS)
     pygame.display.update()
 
 loop = 1
