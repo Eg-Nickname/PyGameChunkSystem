@@ -3,6 +3,7 @@ import pygame
 import pickle
 
 from settings import *
+from GraphicsLoader import graphics
 from worldgen import world_generate_chunk
 
 class Chunks():
@@ -54,4 +55,5 @@ class Chunks():
                         top_x = (TILE_SIZE * idx + (current_chunk_x) * TILE_SIZE * CHUNK_SIZE) - OFFSET[0]
                         if top_x < WIDTH and top_x > -32 or top_y > HEIGHT and top_y < -32:
                             # render_chunk[idy][idx].color
-                            pygame.draw.rect(screen, render_chunk[idy][idx].color, (top_x,top_y,TILE_SIZE,TILE_SIZE))
+                            screen.blit(graphics[render_chunk[idy][idx].tile_name],  (top_x,top_y))
+                            # pygame.draw.rect(screen, render_chunk[idy][idx].color, (top_x,top_y,TILE_SIZE,TILE_SIZE))

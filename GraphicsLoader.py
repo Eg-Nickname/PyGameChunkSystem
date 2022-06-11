@@ -1,4 +1,3 @@
-from json import load
 import os
 import pygame
 
@@ -9,3 +8,5 @@ def load_graphics(path):
             img = pygame.image.load(os.path.join(subdir, file)).convert_alpha()
             graphics[str(file.removesuffix('.png'))] = img
     return graphics
+
+graphics = load_graphics("./static_graphics")
