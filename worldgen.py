@@ -1,9 +1,13 @@
 from opensimplex import OpenSimplex
 from GraphicsLoader import graphics
 
+# World gen settings
 elevation_noise_seed = 2137
 moisture_noise_seed = 4321
 temp_noise_seed = 51515
+WATER_LEVEL = -0.1
+GROUND_SIZE = 100
+BIOME_SIZE = 100
 
 
 elevation_noise = OpenSimplex(elevation_noise_seed)
@@ -16,9 +20,6 @@ class Tile():
     def __init__(self, tile_name=None):
         self.tile_name = tile_name or "placeholder"
 
-
-
-water_level = -0.0009
 def world_generate_chunk(current_chunk_x, current_chunk_y):
         generated_chunk = []
         chunk_top_left = (current_chunk_x*CHUNK_SIZE,current_chunk_y*CHUNK_SIZE)
@@ -28,26 +29,26 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
             for idx in range(CHUNK_SIZE):
                 tile_top_left_x = (chunk_top_left[0]+idx)
                 
-                noise00 = elevation_noise.noise2(tile_top_left_x/100, tile_top_left_y/100)
-                mn=moisture_noise.noise2(tile_top_left_x/100, tile_top_left_y/100)
-                tn=temp_noise.noise2(tile_top_left_x/100, tile_top_left_y/100)
+                noise00 = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
+                mn=moisture_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
+                tn=temp_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
                 # print(mn+tn)
-                if noise00>water_level:
+                if noise00>WATER_LEVEL:
                     row.append(Tile("grass"))
                 else:
-                    noise0_1    = elevation_noise.noise2(tile_top_left_x/100, (tile_top_left_y-1)/100)     
-                    noise_10    = elevation_noise.noise2((tile_top_left_x-1)/100, tile_top_left_y/100)
-                    noise10     = elevation_noise.noise2((tile_top_left_x+1)/100, tile_top_left_y/100)
-                    noise01     = elevation_noise.noise2(tile_top_left_x/100, (tile_top_left_y+1)/100) 
-                    water_img = str(int(noise0_1>water_level))+str(int(noise_10>water_level))+str(int(noise10>water_level))+str(int(noise01>water_level))
+                    noise0_1    = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)     
+                    noise_10    = elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
+                    noise10     = elevation_noise.noise2((tile_top_left_x+1)/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
+                    noise01     = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, (tile_top_left_y+1)/GROUND_SIZE) 
+                    water_img = str(int(noise0_1>WATER_LEVEL))+str(int(noise_10>WATER_LEVEL))+str(int(noise10>WATER_LEVEL))+str(int(noise01>WATER_LEVEL))
                     if water_img == "0000":
-                        if elevation_noise.noise2((tile_top_left_x-1)/100, (tile_top_left_y-1)/100)>water_level:
+                        if elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)>WATER_LEVEL:
                             water_img += "_1000"
-                        elif elevation_noise.noise2((tile_top_left_x+1)/100, (tile_top_left_y-1)/100)>water_level:
+                        elif elevation_noise.noise2((tile_top_left_x+1)/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)>WATER_LEVEL:
                             water_img += "_0100"
-                        elif elevation_noise.noise2((tile_top_left_x-1)/100, (tile_top_left_y+1)/100)>water_level:
+                        elif elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, (tile_top_left_y+1)/GROUND_SIZE)>WATER_LEVEL:
                             water_img += "_0010"
-                        elif elevation_noise.noise2((tile_top_left_x+1)/100, (tile_top_left_y+1)/100)>water_level:
+                        elif elevation_noise.noise2((tile_top_left_x+1)/GROUND_SIZE, (tile_top_left_y+1)/GROUND_SIZE)>WATER_LEVEL:
                             water_img += "_0001"
                         else:
                             water_img == "0000"

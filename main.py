@@ -97,10 +97,8 @@ while loop:
     mouse_pos_y = mouse_pos_y - mouse_pos_y%TILE_SIZE
 
 
-
-
     selected_tile = (mouse_pos_x,mouse_pos_y)
-    # print(selected_tile)   
+
     
 
     DELTA_TIME += 1

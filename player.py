@@ -46,8 +46,14 @@ class Player(pygame.sprite.Sprite):
             if self.velocity_y < self.max_x_velocity:
                 self.velocity_y+=self.velocity_x_increse
 
-        self.position_x += int(self.velocity_x/100)
-        self.position_y += int(self.velocity_y/100)
+        vel_vec = pygame.math.Vector2(self.velocity_x, self.velocity_y)
+        if vel_vec.magnitude() != 0:
+            vel_vec = vel_vec.normalize()
+            
+        
+        print(vel_vec)
+        self.position_x += int(vel_vec.x*abs(self.velocity_x)/100)
+        self.position_y += int(vel_vec.y*abs(self.velocity_y)/100)
 
         if self.velocity_x>0:
             self.velocity_x-=15

@@ -23,12 +23,6 @@ class Chunks():
         print("Chunks Saved!")
 
     def generate_chunk(self, chunk_index, current_chunk_x, current_chunk_y):
-        # generated_chunk = []
-        # for idy in range(CHUNK_SIZE):
-        #     row = []
-        #     for idx in range(CHUNK_SIZE):
-        #         row.append(Tile())
-        #     generated_chunk.append(row)
         generated_chunk = world_generate_chunk(current_chunk_x, current_chunk_y)
         self.chunks[chunk_index] = generated_chunk
 
