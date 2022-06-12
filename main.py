@@ -5,7 +5,6 @@ from settings import *
 
 # Pygame init stuff
 pygame.init()
-pygame.display.set_caption("Chunk System")
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT),SCALED,OPENGL)
 
@@ -41,6 +40,7 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     
     screen.blit(player.image, (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
     FPS = str(int(clock.get_fps()))
+    pygame.display.set_caption(FPS)
     # print(FPS)
     pygame.display.update()
 
