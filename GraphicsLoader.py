@@ -14,15 +14,20 @@ color_palletes = [
     # [pygame.Color(""), pygame.Color(""), pygame.Color(""), pygame.Color(""), pygame.Color(""), pygame.Color(""), pygame.Color(""), pygame.Color("")],
 ]
 
+def palette_swap(surf, old_c, new_c):
+    img_copy = pygame.Surface((32,32))
+    img_copy.fill(new_c)
+    surf.set_colorkey(old_c)
+    img_copy.blit(surf, (0, 0))
+    return img_copy
+
+
 def generate_biome_graphics(list, file, img):
     graphics = list
     for bid, biome in enumerate(biome_list):
         img_copy = img
         for cid, color in enumerate(base_pallete): 
             img_copy = palette_swap(img_copy, base_pallete[cid], color_palletes[bid][cid])
-            # img_copy.fill(color_palletes[bid][cid])
-            # img.set_colorkey(base_pallete[cid])
-            # img_copy.blit(img, (0, 0))
         graphics[str(biome)+"_"+str(file.removesuffix('.png'))] = img_copy
     return graphics
 
