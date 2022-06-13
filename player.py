@@ -51,7 +51,7 @@ class Player(pygame.sprite.Sprite):
             vel_vec = vel_vec.normalize()
             
         
-        print(vel_vec)
+        # print(vel_vec)
         self.position_x += int(vel_vec.x*abs(self.velocity_x)/100)
         self.position_y += int(vel_vec.y*abs(self.velocity_y)/100)
 

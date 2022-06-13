@@ -39,6 +39,7 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
 
     
     screen.blit(player.image, (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
+    # screen.blit(graphics["toxic_water"], (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
     FPS = str(int(clock.get_fps()))
     pygame.display.set_caption(FPS)
     # print(FPS)

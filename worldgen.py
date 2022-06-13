@@ -6,8 +6,8 @@ elevation_noise_seed = 2137
 moisture_noise_seed = 4321
 temp_noise_seed = 51515
 WATER_LEVEL = -0.1
-GROUND_SIZE = 100
-BIOME_SIZE = 100
+GROUND_SIZE = 20
+BIOME_SIZE = 20
 
 
 elevation_noise = OpenSimplex(elevation_noise_seed)
@@ -30,11 +30,13 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                 tile_top_left_x = (chunk_top_left[0]+idx)
                 
                 noise00 = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
-                mn=moisture_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
-                tn=temp_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
+                mn=moisture_noise.noise2(tile_top_left_x/BIOME_SIZE, tile_top_left_y/BIOME_SIZE)
+                tn=temp_noise.noise2(tile_top_left_x/BIOME_SIZE, tile_top_left_y/GROUND_SIZE)
                 # print(mn+tn)
+
+                tile_name = "grass"
                 if noise00>WATER_LEVEL:
-                    row.append(Tile("grass"))
+                    tile_name = "grass"
                 else:
                     noise0_1    = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)     
                     noise_10    = elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
@@ -52,7 +54,15 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                             water_img += "_0001"
                         else:
                             water_img == "0000"
+                    tile_name = "water"+water_img
+                
+                if mn<-0.6:
+                    tile_name="death_"+tile_name
+                elif mn<0.3:
+                    tile_name="toxic_"+tile_name
+                else:
+                    tile_name="candy_"+tile_name
 
-                    row.append(Tile("water"+water_img))
+                row.append(Tile(tile_name))
             generated_chunk.append(row)
         return generated_chunk
