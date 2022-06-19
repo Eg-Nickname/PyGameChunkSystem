@@ -104,13 +104,13 @@ while loop:
 
     DELTA_TIME += 1
 
-    # if DELTA_TIME%120 == 1:
-    #     print("---------------------------------------------------")
-    #     print("Player Pos",player.position_x, " | ", player.position_y)
-    #     print("Mouse World Tile Pos", mouse_pos_x, " | ", mouse_pos_y)
-    #     print("Pisel perf mouse", mouse_pos)
-    #     # print("Chunk", floor((player.position_x)/(CHUNK_SIZE*TILE_SIZE)), " | ",  floor((player.position_y)/(CHUNK_SIZE*TILE_SIZE)))
-    #     print("---------------------------------------------------")
+    if DELTA_TIME%120 == 1:
+        print("---------------------------------------------------")
+        print("Player Pos",player.position_x, " | ", player.position_y)
+        # print("Mouse World Tile Pos", mouse_pos_x, " | ", mouse_pos_y)
+        # print("Pisel perf mouse", mouse_pos)
+        print("Chunk", floor((player.position_x)/(CHUNK_SIZE*TILE_SIZE)), " | ",  floor((player.position_y)/(CHUNK_SIZE*TILE_SIZE)))
+        print("---------------------------------------------------")
     
     PLAYER_CHUNK = (floor((player.position_x)/(CHUNK_SIZE*TILE_SIZE)), floor((player.position_y)/(CHUNK_SIZE*TILE_SIZE)))
 
@@ -120,5 +120,5 @@ while loop:
         chunks.save_chunks()
 
     draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles)
-    clock.tick(60) # fps
+    clock.tick() # fps
 pygame.quit()

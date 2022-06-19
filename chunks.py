@@ -4,7 +4,7 @@ import pickle
 
 from settings import *
 from GraphicsLoader import graphics
-from worldgen import world_generate_chunk
+from worldgen import world_generate_chunk, save_regions
 
 class Chunks():
     def __init__(self):
@@ -20,6 +20,7 @@ class Chunks():
     def save_chunks(self):
         map_file = open("map.save", "wb")
         map_file = pickle.dump(self.chunks, map_file)
+        save_regions()
         print("Chunks Saved!")
 
     def generate_chunk(self, chunk_index, current_chunk_x, current_chunk_y):

@@ -1,5 +1,6 @@
 TILE_SIZE = 32  # Px
-CHUNK_SIZE = 10 # Px
+CHUNK_SIZE = 10 # Tiles
+REGION_SIZE = 14 # Chunks
 
 DELTA_TIME = 0
 
