@@ -23,7 +23,6 @@ def palette_swap(surf, old_c, new_c):
     img_copy.blit(surf, (0, 0))
     return img_copy
 
-
 def generate_biome_graphics(list, file, img):
     graphics = list
     for bid, biome in enumerate(biome_list):
@@ -32,8 +31,6 @@ def generate_biome_graphics(list, file, img):
             img_copy = palette_swap(img_copy, base_pallete[cid], color_palletes[bid][cid])
         graphics[str(biome)+"_"+str(file.removesuffix('.png'))] = img_copy
     return graphics
-
-
 
 def load_graphics(path):
     graphics = {}

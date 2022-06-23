@@ -1,10 +1,10 @@
 from opensimplex import OpenSimplex
-from GraphicsLoader import graphics, biome_list
+from GraphicsLoader import biome_list
 from settings import *
 from math import floor
 import random
 import pickle
-
+import pygame
 
 # World gen settings
 map_seed = 2137
@@ -29,9 +29,11 @@ def save_regions():
 
 
 
-class Tile():
-    def __init__(self, tile_name=None):
-        self.tile_name = tile_name or "placeholder"
+class Tile(pygame.sprite.Sprite):
+    def __init__(self, tile_name=None, collidable=None):
+        super().__init__()
+        self.tile_name = tile_name or "empty"
+        self.has_collision = collidable or False
 
 
 class BiomeRegion():
@@ -67,7 +69,7 @@ def calculate_region(pos_x, pos_y):
     return (floor((pos_x)/(CHUNK_SIZE*REGION_SIZE)), floor((pos_y)/(CHUNK_SIZE*REGION_SIZE)))
 
 
-def calc_nearest_point(region_pos, pos_x, pos_y):
+def calc_nearest_region_point(region_pos, pos_x, pos_y):
     points = []
     for y in range(3):
         for x in range(3):
@@ -93,6 +95,18 @@ def calc_nearest_point(region_pos, pos_x, pos_y):
     return nearest_point
 
 
+def generate_biome_features(biome):
+    tile_seed = random.randrange(0,40)
+    collidable = False
+    tile_name = ""
+    if tile_seed==5:
+        tile_name = biome+"_"+"rock"
+        collidable = True
+    elif tile_seed > 30:
+        tile_name = biome+"_"+"grass"+str(random.randrange(1,4))
+    return Tile(tile_name, collidable)
+
+
 def world_generate_chunk(current_chunk_x, current_chunk_y):
         generated_chunk = []
         chunk_top_left = (current_chunk_x*CHUNK_SIZE,current_chunk_y*CHUNK_SIZE)
@@ -101,14 +115,21 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
             tile_top_left_y = (chunk_top_left[1]+idy)
             for idx in range(CHUNK_SIZE):
                 tile_top_left_x = (chunk_top_left[0]+idx)
-                region_pos = calculate_region(tile_top_left_x, tile_top_left_y)
-                biome = regions[calc_nearest_point(region_pos, tile_top_left_x, tile_top_left_y)].biome
 
+                # Biome determination
+                region_pos = calculate_region(tile_top_left_x, tile_top_left_y)
+                biome = regions[calc_nearest_region_point(region_pos, tile_top_left_x, tile_top_left_y)].biome
+
+                # Water land selection
                 noise00 = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
 
+                # Tile graphic selection
                 tile_name = "grass"
+                layer1_tile_collision = False
+                layer2_tile = Tile()
                 if noise00>WATER_LEVEL:
-                    tile_name = "grass"
+                    layer1_tile_name = "grass"
+                    layer2_tile = generate_biome_features(biome)
                 else:
                     noise0_1    = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)     
                     noise_10    = elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
@@ -116,7 +137,6 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                     noise01     = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, (tile_top_left_y+1)/GROUND_SIZE)
 
                     water_img = str(int(noise0_1>WATER_LEVEL))+str(int(noise_10>WATER_LEVEL))+str(int(noise10>WATER_LEVEL))+str(int(noise01>WATER_LEVEL))
-                    
                     if water_img == "0000":
                         if elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)>WATER_LEVEL:
                             water_img += "_1000"
@@ -128,12 +148,18 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                             water_img += "_0001"
                         else:
                             water_img == "0000"
-                    tile_name = "water"+water_img
-                
-                
-                tile_name=biome+"_"+tile_name
-                
+                    else:
+                        layer1_tile_collision = True
+                    layer1_tile_name = "water"+water_img
+                layer1_tile_name=biome+"_"+layer1_tile_name
+            
 
-                row.append(Tile(tile_name))
+                level = []
+                level.append(Tile(layer1_tile_name, layer1_tile_collision))
+                level.append(layer2_tile)
+                level.append(Tile())
+
+                row.append(level)
+
             generated_chunk.append(row)
         return generated_chunk

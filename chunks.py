@@ -48,4 +48,10 @@ class Chunks():
                     for idx in range(CHUNK_SIZE):
                         top_x = (TILE_SIZE * idx + (current_chunk_x) * TILE_SIZE * CHUNK_SIZE) - OFFSET[0]
                         if top_x < WIDTH and top_x > -32 or top_y > HEIGHT and top_y < -32:
-                            screen.blit(graphics[render_chunk[idy][idx].tile_name],  (top_x,top_y))
+                            for layer in range(3):
+                                tile = render_chunk[idy][idx][layer]
+                                if tile.tile_name != "empty":
+                                    screen.blit(graphics[tile.tile_name],  (top_x,top_y))
+                                if tile.has_collision:
+                                    # print("Has collision")
+                                    pass
