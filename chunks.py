@@ -34,7 +34,6 @@ class Chunks():
         except:
             self.generate_chunk(chunk_index, current_chunk_x, current_chunk_y)
             loaded_chunk = self.chunks[chunk_index]
-
         return loaded_chunk
 
     def render_chunk(self, screen, PLAYER_CHUNK, OFFSET):
@@ -49,6 +48,4 @@ class Chunks():
                     for idx in range(CHUNK_SIZE):
                         top_x = (TILE_SIZE * idx + (current_chunk_x) * TILE_SIZE * CHUNK_SIZE) - OFFSET[0]
                         if top_x < WIDTH and top_x > -32 or top_y > HEIGHT and top_y < -32:
-                            # render_chunk[idy][idx].color
                             screen.blit(graphics[render_chunk[idy][idx].tile_name],  (top_x,top_y))
-                            # pygame.draw.rect(screen, render_chunk[idy][idx].color, (top_x,top_y,TILE_SIZE,TILE_SIZE))

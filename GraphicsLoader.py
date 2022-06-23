@@ -47,11 +47,3 @@ def load_graphics(path):
     return graphics
 
 graphics = load_graphics(".\static_graphics")
-
-
-
-# def loadgraphics():
-#     for biome in bioms:
-#         for file in directory:
-#             # some stuff changing colors
-#             graphics[str(biome)+str(file.removesuffix('.png'))] = img
