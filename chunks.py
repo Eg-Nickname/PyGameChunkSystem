@@ -7,8 +7,9 @@ from GraphicsLoader import graphics
 from worldgen import world_generate_chunk, save_regions
 
 class Chunks():
-    def __init__(self):
+    def __init__(self, player):
         self.chunks = {}
+        self.player = player
 
         try:
             map_file = open("map.save", "rb")
@@ -37,6 +38,7 @@ class Chunks():
         return loaded_chunk
 
     def render_chunk(self, screen, PLAYER_CHUNK, OFFSET):
+        self.player.collision_objects.empty()
         for chy in range(3):
             current_chunk_y = chy+PLAYER_CHUNK[1]-1
             for chx in range(3):
@@ -53,5 +55,4 @@ class Chunks():
                                 if tile.tile_name != "empty":
                                     screen.blit(graphics[tile.tile_name],  (top_x,top_y))
                                 if tile.has_collision:
-                                    # print("Has collision")
-                                    pass
+                                    self.player.collision_objects.add(tile)

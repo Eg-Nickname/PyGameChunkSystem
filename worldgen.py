@@ -1,5 +1,5 @@
 from opensimplex import OpenSimplex
-from GraphicsLoader import biome_list
+from GraphicsLoader import biome_list, graphics
 from settings import *
 from math import floor
 import random
@@ -30,10 +30,18 @@ def save_regions():
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, tile_name=None, collidable=None):
+    def __init__(self, pos_x , pos_y, tile_name=None, collidable=None):
         super().__init__()
+        self.position_x = pos_x*32
+        self.position_y = pos_y*32
+
+
         self.tile_name = tile_name or "empty"
         self.has_collision = collidable or False
+
+        self.rect = graphics[self.tile_name].get_rect()
+        self.rect.topleft = [self.position_x, self.position_y]
+        self.hitbox = self.rect
 
 
 class BiomeRegion():
@@ -95,7 +103,7 @@ def calc_nearest_region_point(region_pos, pos_x, pos_y):
     return nearest_point
 
 
-def generate_biome_features(biome):
+def generate_biome_features(pos_x, pos_y, biome):
     tile_seed = random.randrange(0,40)
     collidable = False
     tile_name = ""
@@ -104,7 +112,7 @@ def generate_biome_features(biome):
         collidable = True
     elif tile_seed > 30:
         tile_name = biome+"_"+"grass"+str(random.randrange(1,4))
-    return Tile(tile_name, collidable)
+    return Tile(pos_x, pos_y, tile_name, collidable)
 
 
 def world_generate_chunk(current_chunk_x, current_chunk_y):
@@ -126,10 +134,10 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                 # Tile graphic selection
                 tile_name = "grass"
                 layer1_tile_collision = False
-                layer2_tile = Tile()
+                layer2_tile = Tile(tile_top_left_x, tile_top_left_y)
                 if noise00>WATER_LEVEL:
                     layer1_tile_name = "grass"
-                    layer2_tile = generate_biome_features(biome)
+                    layer2_tile = generate_biome_features(tile_top_left_x, tile_top_left_y, biome)
                 else:
                     noise0_1    = elevation_noise.noise2(tile_top_left_x/GROUND_SIZE, (tile_top_left_y-1)/GROUND_SIZE)     
                     noise_10    = elevation_noise.noise2((tile_top_left_x-1)/GROUND_SIZE, tile_top_left_y/GROUND_SIZE)
@@ -155,9 +163,9 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
             
 
                 level = []
-                level.append(Tile(layer1_tile_name, layer1_tile_collision))
+                level.append(Tile(tile_top_left_x, tile_top_left_y, layer1_tile_name, layer1_tile_collision))
                 level.append(layer2_tile)
-                level.append(Tile())
+                level.append(Tile(tile_top_left_x, tile_top_left_y))
 
                 row.append(level)
 

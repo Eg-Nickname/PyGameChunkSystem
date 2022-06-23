@@ -8,15 +8,10 @@ class Player(pygame.sprite.Sprite):
         # Position
         self.position_x = pos_x or 0
         self.position_y = pos_y or 0
+        self.velocity = 2
+        self.direction = pygame.math.Vector2()
 
-        # Velocity
-        self.velocity_x = 0
-        self.velocity_x_increse = 40
-        self.max_x_velocity = 280
-
-        self.velocity_y = 0
-        self.velocity_y_increse = 40
-        self.max_y_velocity = 280
+        self.status = "up"
         
         self.last_attack = 0
         self.attack_delay = 60 # 1s
@@ -27,40 +22,57 @@ class Player(pygame.sprite.Sprite):
 
         self.rect = self.image.get_rect()
         self.rect.topleft = [self.position_x, self.position_y]
+        self.hitbox = self.rect.inflate(-8,-8)
+
+        self.collision_objects = pygame.sprite.Group()
 
 
     def movement(self, pressed_keys):
         if pressed_keys[100]:
-            if self.velocity_x < self.max_x_velocity:
-                self.velocity_x+=self.velocity_x_increse
+            self.direction.x = 1
+            self.status = 'right'
+        elif pressed_keys[97]:    
+            self.direction.x = -1
+            self.status = 'left'
+        else:
+            self.direction.x = 0
 
-        if pressed_keys[97]:	
-            if self.velocity_x > -self.max_x_velocity:
-                self.velocity_x-=self.velocity_x_increse
+        if pressed_keys[119]:    
+            self.direction.y = -1
+            self.status = 'up'
+        elif pressed_keys[115]:
+            self.direction.y = 1
+            self.status = 'down'
+        else:
+            self.direction.y = 0
 
-        if pressed_keys[119]:	
-            if self.velocity_y > -self.max_y_velocity:
-                self.velocity_y-=self.velocity_y_increse
-
-        if pressed_keys[115]:
-            if self.velocity_y < self.max_x_velocity:
-                self.velocity_y+=self.velocity_x_increse
-
-        vel_vec = pygame.math.Vector2(self.velocity_x, self.velocity_y)
-        if vel_vec.magnitude() != 0:
-            vel_vec = vel_vec.normalize()
+        # if self.direction.magnitude() != 0:
+        #     self.direction = self.direction.normalize()
             
-        
-        # print(vel_vec)
-        self.position_x += int(vel_vec.x*abs(self.velocity_x)/100)
-        self.position_y += int(vel_vec.y*abs(self.velocity_y)/100)
+    
+        self.hitbox.x += self.direction.x * self.velocity
+        self.collision('horizontal')
 
-        if self.velocity_x>0:
-            self.velocity_x-=15
-        elif self.velocity_x<0:
-            self.velocity_x+=15
+        self.hitbox.y += self.direction.y * self.velocity
+        self.collision('vertical')
+        self.rect.center = self.hitbox.center
 
-        if self.velocity_y>0:
-            self.velocity_y-=15
-        elif self.velocity_y<0:
-            self.velocity_y+=15
+        self.position_x = self.rect.topleft[0]
+        self.position_y = self.rect.topleft[1]
+
+    def collision(self, direction):
+        if direction == 'horizontal':
+            for sprite in self.collision_objects:
+                if sprite.hitbox.colliderect(self.hitbox):
+                    if self.direction.x > 0: # moving right
+                        self.hitbox.right = sprite.hitbox.left
+                    if self.direction.x < 0: # moving left
+                        self.hitbox.left = sprite.hitbox.right
+
+        if direction == 'vertical':
+            for sprite in self.collision_objects:
+                if sprite.hitbox.colliderect(self.hitbox):
+                    if self.direction.y > 0: # moving down
+                        self.hitbox.bottom = sprite.hitbox.top
+                    if self.direction.y < 0: # moving up
+                        self.hitbox.top = sprite.hitbox.bottom

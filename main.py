@@ -21,10 +21,12 @@ particle_light = pygame.transform.scale(pygame.image.load("./static_graphics/par
 
 particles = []
 
-chunks = Chunks()
-sprites = pygame.sprite.Group()
+
+# sprites = pygame.sprite.Group()
 player = Player()
-sprites.add(player)
+# sprites.add(player)
+
+chunks = Chunks(player)
 
 def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     chunks.render_chunk(screen, PLAYER_CHUNK, (OFFSET_X, OFFSET_Y))
@@ -118,5 +120,5 @@ while loop:
         chunks.save_chunks()
 
     draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles)
-    clock.tick() # fps
+    clock.tick(60) # fps
 pygame.quit()
