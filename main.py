@@ -37,13 +37,13 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
 
     # Render graphic on top of tile that cursor is on top of
     screen.blit(graphics["tile_select"], (selected_tile[0]-OFFSET_X-2, selected_tile[1]-OFFSET_Y-2))
-
     
     screen.blit(player.image, (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
     FPS = str(int(clock.get_fps()))
     pygame.display.set_caption(FPS)
     # print(FPS)
     pygame.display.update()
+
 
 loop = True
 while loop:

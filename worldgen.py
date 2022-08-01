@@ -14,7 +14,7 @@ GROUND_SIZE = 40
 elevation_noise = OpenSimplex(map_seed)
 random.seed(map_seed)
 
-
+# Map save load
 try:
     regions_file = open("regions.save", "rb")
     regions = pickle.load(regions_file)
@@ -28,21 +28,31 @@ def save_regions():
         regions_file = pickle.dump(regions, regions_file)
 
 
-
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, pos_x , pos_y, tile_name=None, collidable=None):
+    def __init__(self, pos_x , pos_y, biome=None, tile_type=None, collidable=None):
         super().__init__()
         self.position_x = pos_x*32
         self.position_y = pos_y*32
 
-
-        self.tile_name = tile_name or "empty"
+        self.biome = biome or ""
+        self.tile_type = tile_type or "empty"
         self.has_collision = collidable or False
 
+        if self.tile_type != "empty":
+            self.tile_name = self.biome+"_"+self.tile_type
+        else:
+            self.tile_name = "empty"
         self.rect = graphics[self.tile_name].get_rect()
         self.rect.topleft = [self.position_x, self.position_y]
         self.hitbox = self.rect
 
+    def update_tile(self, tile_type):
+        self.tile_type = tile_type
+        if self.tile_type != "empty":
+            tile_name = self.biome+"_"+self.tile_type
+        else:
+            tile_name = "empty"
+        self.rect = graphics[tile_name].get_rect()
 
 class BiomeRegion():
     def __init__(self, pos_str, region_pos):
@@ -106,13 +116,13 @@ def calc_nearest_region_point(region_pos, pos_x, pos_y):
 def generate_biome_features(pos_x, pos_y, biome):
     tile_seed = random.randrange(0,40)
     collidable = False
-    tile_name = ""
+    tile_type = ""
     if tile_seed==5:
-        tile_name = biome+"_"+"rock"
+        tile_type = "rock"
         collidable = True
     elif tile_seed > 30:
-        tile_name = biome+"_"+"grass"+str(random.randrange(1,4))
-    return Tile(pos_x, pos_y, tile_name, collidable)
+        tile_type = "grass"+str(random.randrange(1,4))
+    return Tile(pos_x, pos_y, biome, tile_type, collidable)
 
 
 def world_generate_chunk(current_chunk_x, current_chunk_y):
@@ -159,11 +169,11 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                     else:
                         layer1_tile_collision = True
                     layer1_tile_name = "water"+water_img
-                layer1_tile_name=biome+"_"+layer1_tile_name
+                # layer1_tile_name=biome+"_"+layer1_tile_name
             
 
                 level = []
-                level.append(Tile(tile_top_left_x, tile_top_left_y, layer1_tile_name, layer1_tile_collision))
+                level.append(Tile(tile_top_left_x, tile_top_left_y, biome, layer1_tile_name, layer1_tile_collision))
                 level.append(layer2_tile)
                 level.append(Tile(tile_top_left_x, tile_top_left_y))
 
