@@ -1,6 +1,8 @@
 import pygame
 
 import pickle
+from math import floor
+
 
 from settings import *
 from GraphicsLoader import graphics
@@ -36,6 +38,17 @@ class Chunks():
             self.generate_chunk(chunk_index, current_chunk_x, current_chunk_y)
             loaded_chunk = self.chunks[chunk_index]
         return loaded_chunk
+
+    def get_chunk_pos(self, pos_x, pos_y):
+        return (floor(pos_x/(CHUNK_SIZE*TILE_SIZE)), floor(pos_y/(CHUNK_SIZE*TILE_SIZE)))
+
+    def get_tile(self, pos_x, pos_y):
+        chunk_pos = self.get_chunk_pos(pos_x, pos_y)
+        chunk = self.load_chunk(chunk_pos[0], chunk_pos[1])
+        (CHUNK_SIZE*TILE_SIZE*chunk_pos[0])
+        tile_pos = (floor((pos_x-(CHUNK_SIZE*TILE_SIZE*chunk_pos[0]))/TILE_SIZE), floor((pos_y-(CHUNK_SIZE*TILE_SIZE*chunk_pos[1]))/TILE_SIZE))
+        return chunk[tile_pos[1]][tile_pos[0]]
+
 
     def render_chunk(self, screen, PLAYER_CHUNK, OFFSET):
         self.player.collision_objects.empty()

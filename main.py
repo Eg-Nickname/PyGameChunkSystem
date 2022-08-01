@@ -14,6 +14,7 @@ from camera import calculate_offset
 from player import Player
 from particles import Particle
 from GraphicsLoader import graphics
+from mouse import Mouse
 
 
 
@@ -27,6 +28,10 @@ player = Player()
 # sprites.add(player)
 
 chunks = Chunks(player)
+
+# chunks.get_tile(10, 10)444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+
+mouse = Mouse()
 
 def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     chunks.render_chunk(screen, PLAYER_CHUNK, (OFFSET_X, OFFSET_Y))
@@ -47,17 +52,15 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
 
 loop = True
 while loop:
-    pressed_keys = pygame.key.get_pressed()
-
     for event in pygame.event.get():
     	if event.type == pygame.QUIT:
             loop = False
 
+    pressed_keys = pygame.key.get_pressed()
     player.movement(pressed_keys)
     OFFSET_X, OFFSET_Y = calculate_offset(player)
 
     # Circle effect
-
     if pressed_keys[118]:
         if DELTA_TIME-player.attack_delay>player.last_attack:
             player.last_attack = DELTA_TIME
@@ -66,7 +69,6 @@ while loop:
                 particles.append(Particle(player.position_x+16, player.position_y+16, rotation, DELTA_TIME))
     
     # Spirall Effect
-
     # if pressed_keys[98]:
     #     if DELTA_TIME-player.attack_delay>player.last_attack:
     #         player.last_attack = DELTA_TIME
@@ -81,26 +83,12 @@ while loop:
             particles.remove(particle)
 
 
-
-
-
-
-
     pygame.mouse.get_visible()
     mouse_pos = pygame.mouse.get_pos()
 
-    player.position_x - player.position_x%TILE_SIZE
+    selected_tile = mouse.get_selected_tile(mouse_pos, player)
 
-    mouse_pos_x = mouse_pos[0]  + player.position_x - 320
-    mouse_pos_y = mouse_pos[1]-19  + player.position_y - 160
-
-    mouse_pos_x = mouse_pos_x - mouse_pos_x%TILE_SIZE
-    mouse_pos_y = mouse_pos_y - mouse_pos_y%TILE_SIZE
-
-
-    selected_tile = (mouse_pos_x,mouse_pos_y)
-
-    
+    mouse.key_press_handler(pygame.mouse.get_pressed(), chunks)
 
     DELTA_TIME += 1
 
@@ -112,7 +100,7 @@ while loop:
         # print("Chunk", floor((player.position_x)/(CHUNK_SIZE*TILE_SIZE)), " | ",  floor((player.position_y)/(CHUNK_SIZE*TILE_SIZE)))
         # print("---------------------------------------------------")
     
-    PLAYER_CHUNK = (floor((player.position_x)/(CHUNK_SIZE*TILE_SIZE)), floor((player.position_y)/(CHUNK_SIZE*TILE_SIZE)))
+    PLAYER_CHUNK = player.get_player_chunk()
 
 
 

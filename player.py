@@ -1,5 +1,8 @@
 import pygame
 import os
+from math import floor
+from settings import *
+
 FILERDIR = os.path.dirname(os.path.abspath(__file__))
 
 class Player(pygame.sprite.Sprite):
@@ -76,3 +79,6 @@ class Player(pygame.sprite.Sprite):
                         self.hitbox.bottom = sprite.hitbox.top
                     if self.direction.y < 0: # moving up
                         self.hitbox.top = sprite.hitbox.bottom
+
+    def get_player_chunk(self):
+        return (floor((self.position_x)/(CHUNK_SIZE*TILE_SIZE)), floor((self.position_y)/(CHUNK_SIZE*TILE_SIZE)))
