@@ -15,8 +15,10 @@ class Mouse:
 
         return self.mouse_pos
 
-    def key_press_handler(self, pressed_keys, chunks):
+    def key_press_handler(self, pressed_keys, deltatime, chunks, player):
         if pressed_keys[0] == True:
             chunk = chunks.get_tile(self.mouse_pos[0], self.mouse_pos[1])
-            if chunk[1].tile_type != "empty":
-                chunk[1] = Tile(chunk[1].position_x, chunk[1].position_y)
+            if chunk[1].tile_type != "empty" and player.selected_slot == 0:
+                chunk[1].update_tile("empty", False)
+            elif player.selected_slot == 1 and deltatime%5==1:
+                chunk[1].update_tile("rock", True)

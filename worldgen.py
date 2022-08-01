@@ -46,13 +46,14 @@ class Tile(pygame.sprite.Sprite):
         self.rect.topleft = [self.position_x, self.position_y]
         self.hitbox = self.rect
 
-    def update_tile(self, tile_type):
+    def update_tile(self, tile_type, collision):
         self.tile_type = tile_type
+        self.has_collision = collision
         if self.tile_type != "empty":
-            tile_name = self.biome+"_"+self.tile_type
+            self.tile_name = self.biome+"_"+self.tile_type
         else:
-            tile_name = "empty"
-        self.rect = graphics[tile_name].get_rect()
+            self.tile_name = "empty"
+        self.rect = graphics[self.tile_name].get_rect()
 
 class BiomeRegion():
     def __init__(self, pos_str, region_pos):
@@ -144,7 +145,7 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                 # Tile graphic selection
                 tile_name = "grass"
                 layer1_tile_collision = False
-                layer2_tile = Tile(tile_top_left_x, tile_top_left_y)
+                layer2_tile = Tile(tile_top_left_x, tile_top_left_y, biome)
                 if noise00>WATER_LEVEL:
                     layer1_tile_name = "grass"
                     layer2_tile = generate_biome_features(tile_top_left_x, tile_top_left_y, biome)

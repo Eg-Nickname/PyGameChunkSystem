@@ -44,21 +44,26 @@ def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
     screen.blit(graphics["tile_select"], (selected_tile[0]-OFFSET_X-2, selected_tile[1]-OFFSET_Y-2))
     
     screen.blit(player.image, (player.position_x - OFFSET_X, player.position_y - OFFSET_Y))
+
+    # FPS counter in game window
     FPS = str(int(clock.get_fps()))
     pygame.display.set_caption(FPS)
-    # print(FPS)
+
+    # End of drawing
     pygame.display.update()
 
 
 loop = True
 while loop:
+    DELTA_TIME += 1
     for event in pygame.event.get():
     	if event.type == pygame.QUIT:
             loop = False
 
     pressed_keys = pygame.key.get_pressed()
-    player.movement(pressed_keys)
+    player.key_press_handler(pressed_keys)
     OFFSET_X, OFFSET_Y = calculate_offset(player)
+
 
     # Circle effect
     if pressed_keys[118]:
@@ -85,12 +90,10 @@ while loop:
 
     pygame.mouse.get_visible()
     mouse_pos = pygame.mouse.get_pos()
-
     selected_tile = mouse.get_selected_tile(mouse_pos, player)
+    mouse.key_press_handler(pygame.mouse.get_pressed(), DELTA_TIME, chunks, player)
 
-    mouse.key_press_handler(pygame.mouse.get_pressed(), chunks)
-
-    DELTA_TIME += 1
+    
 
     # if DELTA_TIME%120 == 1:
         # print("---------------------------------------------------")
@@ -101,8 +104,6 @@ while loop:
         # print("---------------------------------------------------")
     
     PLAYER_CHUNK = player.get_player_chunk()
-
-
 
     if DELTA_TIME% CHUNKS_SAVE_DELAY == 1:
         chunks.save_chunks()

@@ -8,6 +8,10 @@ FILERDIR = os.path.dirname(os.path.abspath(__file__))
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos_x = None, pos_y = None):
         super().__init__()
+
+        self.selected_slot = 0
+        self.selected_biome = 0
+
         # Position
         self.position_x = pos_x or 0
         self.position_y = pos_y or 0
@@ -29,6 +33,9 @@ class Player(pygame.sprite.Sprite):
 
         self.collision_objects = pygame.sprite.Group()
 
+    def key_press_handler(self, pressed_keys):
+        self.movement(pressed_keys)
+        self.slot_selector(pressed_keys)
 
     def movement(self, pressed_keys):
         if pressed_keys[100]:
@@ -62,6 +69,12 @@ class Player(pygame.sprite.Sprite):
 
         self.position_x = self.rect.topleft[0]
         self.position_y = self.rect.topleft[1]
+
+    def slot_selector(self, pressed_keys):
+        for x in range(9):
+            if pressed_keys[(x+49)]:
+                self.selected_slot = x
+                print(self.selected_slot)
 
     def collision(self, direction):
         if direction == 'horizontal':
