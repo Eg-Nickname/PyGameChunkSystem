@@ -13,7 +13,7 @@ from worldgen import world_generate_chunk, save_regions
 # Working with chunks 
 @lru_cache
 def load_chunk(current_chunk_x, current_chunk_y):
-    chunk_index = str(current_chunk_x)+";"+str(current_chunk_y)
+    chunk_index = get_chunk_index(current_chunk_x, current_chunk_y)
     try:
         chunk_file = open(f'{save_path}/chunks/{chunk_index}.save', "rb")
         chunk = pickle.load(chunk_file)
@@ -31,6 +31,9 @@ def save_chunk(chunk_index, chunk):
 
 def get_chunk_pos(pos_x, pos_y):
     return (floor(pos_x/(CHUNK_SIZE*TILE_SIZE)), floor(pos_y/(CHUNK_SIZE*TILE_SIZE)))
+
+def get_chunk_index(current_chunk_x, current_chunk_y):
+    return str(current_chunk_x)+";"+str(current_chunk_y)
 
 def get_tile(pos_x, pos_y):
     chunk_pos = get_chunk_pos(pos_x, pos_y)
@@ -57,6 +60,7 @@ def render_chunk(screen, PLAYER_CHUNK, OFFSET, player):
                                     screen.blit(graphics[tile.tile_name],  (top_x,top_y))
                                 if tile.has_collision:
                                     player.collision_objects.add(tile)
+                save_chunk(get_chunk_index(current_chunk_x, current_chunk_y),render_chunk)
 
 
 # Old
