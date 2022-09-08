@@ -10,3 +10,5 @@ HEIGHT = 360    # Px
 CHUNKS_SAVE_DELAY = 20 # Time in seconds
 
 CHUNKS_SAVE_DELAY = CHUNKS_SAVE_DELAY * 60
+
+save_path = "default"
