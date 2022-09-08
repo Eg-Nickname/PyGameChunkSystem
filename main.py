@@ -9,7 +9,7 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((WIDTH, HEIGHT),SCALED,OPENGL)
 
 # Engine imports
-from chunks import Chunks
+from chunks import render_chunk
 from camera import calculate_offset
 from player import Player
 from particles import Particle
@@ -27,14 +27,14 @@ particles = []
 player = Player()
 # sprites.add(player)
 
-chunks = Chunks(player)
+# chunks = Chunks(player)
 
 # chunks.get_tile(10, 10)444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
 
 mouse = Mouse()
 
 def draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles):
-    chunks.render_chunk(screen, PLAYER_CHUNK, (OFFSET_X, OFFSET_Y))
+    render_chunk(screen, PLAYER_CHUNK, (OFFSET_X, OFFSET_Y), player)
 
     for particle in particles:
         screen.blit(particle_light, (particle.pos_x-OFFSET_X-2, particle.pos_y-OFFSET_Y-2), special_flags=BLEND_RGB_ADD)
@@ -91,7 +91,7 @@ while loop:
     pygame.mouse.get_visible()
     mouse_pos = pygame.mouse.get_pos()
     selected_tile = mouse.get_selected_tile(mouse_pos, player)
-    mouse.key_press_handler(pygame.mouse.get_pressed(), DELTA_TIME, chunks, player)
+    mouse.key_press_handler(pygame.mouse.get_pressed(), DELTA_TIME, player)
 
     
 
@@ -105,8 +105,8 @@ while loop:
     
     PLAYER_CHUNK = player.get_player_chunk()
 
-    if DELTA_TIME% CHUNKS_SAVE_DELAY == 1:
-        chunks.save_chunks()
+    # if DELTA_TIME% CHUNKS_SAVE_DELAY == 1:
+    #     chunks.save_chunks()
 
     draw(player, OFFSET_X, OFFSET_Y, PLAYER_CHUNK, selected_tile, particles)
     clock.tick(60) # fps

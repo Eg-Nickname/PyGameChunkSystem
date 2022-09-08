@@ -176,7 +176,6 @@ def world_generate_chunk(current_chunk_x, current_chunk_y):
                 level = []
                 level.append(Tile(tile_top_left_x, tile_top_left_y, biome, layer1_tile_name, layer1_tile_collision))
                 level.append(layer2_tile)
-                level.append(Tile(tile_top_left_x, tile_top_left_y))
 
                 row.append(level)
 

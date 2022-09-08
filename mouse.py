@@ -1,5 +1,6 @@
 from settings import *
 from worldgen import Tile
+from chunks import get_tile
 class Mouse:
     def __init__(self):
         self.mouse_pos = [0,0]
@@ -15,10 +16,10 @@ class Mouse:
 
         return self.mouse_pos
 
-    def key_press_handler(self, pressed_keys, deltatime, chunks, player):
+    def key_press_handler(self, pressed_keys, deltatime, player):
         if pressed_keys[0] == True:
-            chunk = chunks.get_tile(self.mouse_pos[0], self.mouse_pos[1])
-            if chunk[1].tile_type != "empty" and player.selected_slot == 0:
-                chunk[1].update_tile("empty", False)
+            tile = get_tile(self.mouse_pos[0], self.mouse_pos[1])
+            if tile[1].tile_type != "empty" and player.selected_slot == 0:
+                tile[1].update_tile("empty", False)
             elif player.selected_slot == 1 and deltatime%5==1:
-                chunk[1].update_tile("rock", True)
+                tile[1].update_tile("rock", True)
